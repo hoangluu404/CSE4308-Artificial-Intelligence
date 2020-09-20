@@ -23,6 +23,7 @@ def print_output(route, info):
         print( node + ' to ' + node + ', ' + str(info) +' km')
 
 def isVisited(current_city):
+    print('isVisited ' + str(current_city))
     try:
         visited.index(current_city)
         #print(current_city + ' is already visited')
@@ -33,18 +34,9 @@ def isVisited(current_city):
         return False
 
 def sort(cities):
-    if(len(cities)<2):
-        print('nothing to sort')
-        return cities
-
     temp = []
-    
     print(cities)
     for num in cities:
-        #if(len(temp)==0):
-            #temp.append(cities.pop())
-
-        '''
         if(len(temp)==0):
             temp.append(cities.pop(0))
         else:
@@ -52,22 +44,13 @@ def sort(cities):
             for i in range (len(cities)):
                 if( temp and cities[0] < temp[len(temp)-1]):
                     temp.append(cities.pop(0))
-                    print('\ntemp = ' + str(temp))
-
                 elif( temp and cities[0] > temp[len(temp)-1]):
                     while( temp and cities[0] > temp[len(temp)-1] ):
                         holder.append(temp.pop(len(temp)-1))
-                        print('\ntemp = ' + str(temp))
-                        print('holder = ' + str(holder))
-                    
-                    print('-------------')
                     temp.append(cities.pop(0))
                     while( holder ):
                         temp.append(holder.pop(len(holder)-1))
-                        print('\ntemp = ' + str(temp))
-                        print('holder = ' + str(holder))  
-                        '''  
-    temp.reverse()    
+    #temp.reverse()    
     return temp
 
 def next_city(fringe, cost, city_map, destination, route, node, path_found):
@@ -82,10 +65,12 @@ def next_city(fringe, cost, city_map, destination, route, node, path_found):
     current_city = fringe.pop(0)
     #print('node ' + str(node))
     #print(str(fringe) + '----------------')
-    
+    print('fringe0 = ' +str(current_city))
+    print('visited_arr = '+str(visited))
     if(isVisited(current_city)):
         #print('going back to previous city')
         return
+
     route.append(current_city)
     if(current_city==destination):
 
@@ -103,9 +88,9 @@ def next_city(fringe, cost, city_map, destination, route, node, path_found):
     except:
         return
     
-    sorted_city = sort(city_map[current_city])
+    sorted_city = find_next_path(city_map[current_city])
     print('currently in ' + str(current_city) + ', cost = ' + str(cost))
-    for city in city_map[current_city]:
+    for city in sorted_city:
         #if(not isVisited(city)):    
 
 
@@ -115,15 +100,31 @@ def next_city(fringe, cost, city_map, destination, route, node, path_found):
     for i in range( len(city_map[current_city]) ):
         print(current_city + ' to ' + fringe[0])
         #print(str(fringe) + '~~~~~~~~~~~~~~~~')
-
-
- 
-    return next_city(fringe, cost+int(city_map[current_city][fringe[0]]), city_map, destination, route, node, path_found)
+        next_city(fringe, cost+int(city_map[current_city][fringe[0]]), city_map, destination, route, node, path_found)
+        #return next_city(fringe, cost+int(city_map[current_city][fringe[0]]), city_map, destination, route, node, path_found)
 
     
 
+def find_next_path(current_city):
+    distance = []
+    for value in current_city.values():
+        distance.append(value)
+    temp = []
+    distance = sort(distance)
+
+    print(distance)
+    for amount in distance:
+        for key in current_city:
+            
+            if( current_city[key] == amount):
+                try:
+                    temp.index(key)
+                except:        
+                    temp.append(key)
     
-    
+    print(temp)
+    return temp
+
 # depth first seach LIFO
 def uninformed_search(city_map, source, destination):
     print('UNINFORMED')
@@ -132,7 +133,11 @@ def uninformed_search(city_map, source, destination):
     route = []
     node = 0
     path_found = False
-    #sort(city_map['Frankfurt'])
+
+    
+
+    
+
     result = next_city(fringe, 0, city_map, destination, route, node, path_found)
     
     
@@ -142,6 +147,7 @@ def uninformed_search(city_map, source, destination):
         print('path found')
     else: # if not found
         print('path not found')
+
     
 
 
