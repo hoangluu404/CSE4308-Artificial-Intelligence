@@ -100,7 +100,6 @@ def uninformed_search(city_map, source, destination):
 
     # if path not found
     else:
-        print(result)
         print('nodes expanded: ' + str(result[0][1][0]) + '\nnodes generated: ' + str(result[0][1][1]) )
         print('distance: infinity')
         print('route:\nnone')
