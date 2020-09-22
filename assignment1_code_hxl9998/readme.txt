@@ -28,7 +28,7 @@ uninformed_search():
 
 uniform_cost_search():
     take in city routes, source, destination, fringe, visited, and path
-    perform uniform_cost_search by calling itself recursivelly
+    perform uniform_cost_search by calling itself recursively
     add its current cost and route into fringe and/or visited
     also keep track of how many node visited and generated
     when destination is reached,
@@ -38,7 +38,7 @@ uniform_cost_search():
 
 extract_route():
     take in nested route list
-    recursivelly calling itself to extract each layer of the nested route list
+    recursively calling itself to extract each layer of the nested route list
     return the extracted route as a list
 
 To run the code:

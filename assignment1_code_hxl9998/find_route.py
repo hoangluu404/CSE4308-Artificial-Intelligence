@@ -30,8 +30,8 @@ def uniform_cost_search(fringe, visited, city_map, source, destination, nodes, p
             return [fringe[closest_city], nodes]
 
         # put that element into visited to be visited
-        cost_current = fringe.pop(closest_city)
-        visited[closest_city] = cost_current
+        current_path = fringe.pop(closest_city)
+        visited[closest_city] = current_path
 
         # expand that element and added into fringe
         for city in city_map[closest_city]:
@@ -40,24 +40,24 @@ def uniform_cost_search(fringe, visited, city_map, source, destination, nodes, p
             # if it is not visited or in the fringe
             if( not (city in visited or city in fringe)):
                 
-                fringe[city] = [ cost_current[0] + city_map[closest_city][city], [cost_current[1],city] ]
+                fringe[city] = [ current_path[0] + city_map[closest_city][city], [current_path[1],city] ]
             # # else if it is visited
             # elif( city in visited):
-            #     if(visited[city][0] > cost_current[0] + city_map[closest_city][city]):
-            #         fringe[city] = [cost_current[0] + city_map[closest_city][city],[cost_current[1], city]]
+            #     if(visited[city][0] > current_path[0] + city_map[closest_city][city]):
+            #         fringe[city] = [current_path[0] + city_map[closest_city][city],[current_path[1], city]]
             #         visited.pop(city)
                 
             # # else if it is in the fringe
             # elif( city in fringe):
-            #     if(fringe[city][0] > cost_current[0] + city_map[closest_city][city]):
-            #         fringe[city] = [cost_current[0] + city_map[closest_city][city], [cost_current[1], city]]
+            #     if(fringe[city][0] > current_path[0] + city_map[closest_city][city]):
+            #         fringe[city] = [current_path[0] + city_map[closest_city][city], [current_path[1], city]]
             # 
             elif ( city in (fringe or visited)):
-                if( city in visited and visited[city][0] > cost_current[0] + city_map[closest_city][city]):
-                    visited[city] = [cost_current[0] + city_map[closest_city][city],[cost_current[1], city]]
+                if( city in visited and visited[city][0] > current_path[0] + city_map[closest_city][city]):
+                    visited[city] = [current_path[0] + city_map[closest_city][city],[current_path[1], city]]
                     fringe[city] = visited.pop(city)
-                elif( city in fringe and fringe[city][0] > cost_current[0] + city_map[closest_city][city]):
-                    fringe[city] = [cost_current[0] + city_map[closest_city][city], [cost_current[1], city]]
+                elif( city in fringe and fringe[city][0] > current_path[0] + city_map[closest_city][city]):
+                    fringe[city] = [current_path[0] + city_map[closest_city][city], [current_path[1], city]]
 
     return uniform_cost_search(fringe, visited, city_map, source, destination, nodes, path)
     
