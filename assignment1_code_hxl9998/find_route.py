@@ -8,147 +8,106 @@ destination_city
 h_text
 '''
 
-visited = []
 
 
 
 
-def print_output(route, info):
-
-    print('nodes expanded: ' + str(info[0]))
-    print('nodes generated: ' + str(info[1]))
-    print('distance: ' + str(info) + ' km')
-    print('route: ' + str(route) )
-    for node in route:
-        print( node + ' to ' + node + ', ' + str(info) +' km')
-
-def isVisited(current_city):
-    print('isVisited ' + str(current_city))
-    try:
-        visited.index(current_city)
-        #print(current_city + ' is already visited')
-        return True
-    except:
-        visited.append(current_city)
-        #print(current_city + ' not yet visited')
-        return False
-
-def sort(cities):
-    temp = []
-    print(cities)
-    for num in cities:
-        if(len(temp)==0):
-            temp.append(cities.pop(0))
-        else:
-            holder = []
-            for i in range (len(cities)):
-                if( temp and cities[0] < temp[len(temp)-1]):
-                    temp.append(cities.pop(0))
-                elif( temp and cities[0] > temp[len(temp)-1]):
-                    while( temp and cities[0] > temp[len(temp)-1] ):
-                        holder.append(temp.pop(len(temp)-1))
-                    temp.append(cities.pop(0))
-                    while( holder ):
-                        temp.append(holder.pop(len(holder)-1))
-    #temp.reverse()    
-    return temp
-
-def next_city(fringe, cost, city_map, destination, route, node, path_found):
-    
-
-    print('next' + str(path_found))
-    if( len(fringe)==0):
-        return
-
-    
-
-    current_city = fringe.pop(0)
-    #print('node ' + str(node))
-    #print(str(fringe) + '----------------')
-    print('fringe0 = ' +str(current_city))
-    print('visited_arr = '+str(visited))
-    if(isVisited(current_city)):
-        #print('going back to previous city')
-        return
-
-    route.append(current_city)
-    if(current_city==destination):
-
-        path_found = True
-        print('path found = ' + str(path_found))
-        print('destination reached, cost = ' + str(cost))
-        print('route = ' + str(route))
-        print('node expanded = ' + str(node))
-        return True
-    if(path_found):
-        return True
-
-    try:
-        city_map[current_city]
-    except:
-        return
-    
-    sorted_city = find_next_path(city_map[current_city])
-    print('currently in ' + str(current_city) + ', cost = ' + str(cost))
-    for city in sorted_city:
-        #if(not isVisited(city)):    
 
 
-        fringe.insert(0, city)
-        print(city + ' added into fringe')
-    
-    for i in range( len(city_map[current_city]) ):
-        print(current_city + ' to ' + fringe[0])
-        #print(str(fringe) + '~~~~~~~~~~~~~~~~')
-        next_city(fringe, cost+int(city_map[current_city][fringe[0]]), city_map, destination, route, node, path_found)
-        #return next_city(fringe, cost+int(city_map[current_city][fringe[0]]), city_map, destination, route, node, path_found)
+# perform recursive Uniform Cost Search (UCS)
+# return total distance and nodes expanded and nodes generated and the cities expanded
+# return [ distance, [ nodes expanded, nodes generated ], [ cities ] ]
+def uniform_cost_search(fringe, visited, city_map, source, destination, nodes, route, path):
 
-    
+    # if fringe empty, return -1
+    if( not fringe ): return [-1, nodes, route]
 
-def find_next_path(current_city):
-    distance = []
-    for value in current_city.values():
-        distance.append(value)
-    temp = []
-    distance = sort(distance)
+    # compare and find minimum distance in the fringe
+    if( fringe ):
+        closest_city = min(fringe, key=fringe.get)
+        nodes[0] = nodes[0]+1
 
-    print(distance)
-    for amount in distance:
-        for key in current_city:
+        route.append(closest_city)
+        
+        # if that minimum element is destination, return cost of the path
+        if( closest_city == destination ):
+            print(str(source) + ' to ' + str(closest_city) + ' with distance ' + str(fringe[closest_city]))
+            print('\n\n')
             
-            if( current_city[key] == amount):
-                try:
-                    temp.index(key)
-                except:        
-                    temp.append(key)
-    
-    print(temp)
-    return temp
+            return [fringe[closest_city], nodes, route]
 
-# depth first seach LIFO
+        # put that element into visited to be visited
+        cost_current = fringe.pop(closest_city)
+        visited[closest_city] = cost_current
+
+        # expand that element and added into fringe
+        for city in city_map[closest_city]:
+            nodes[1]=nodes[1]+1
+
+            # if it is not visited or in the fringe
+            if( not (city in visited or city in fringe)):
+                
+                fringe[city] = [ cost_current[0] + city_map[closest_city][city], [cost_current[1],city] ]
+            # else if it is visited
+            elif( city in visited):
+                if(visited[city][0] > cost_current[0] + city_map[closest_city][city]):
+                    visited[city]= cost_current[0] + city_map[closest_city][city]
+
+            # else if it is in the fringe
+            elif( city in fringe):
+                if(fringe[city][0] > cost_current[0] + city_map[closest_city][city]):
+                    fringe[city] = [cost_current[0] + city_map[closest_city][city], [cost_current[1], city]]
+
+            
+    print(fringe)
+    return uniform_cost_search(fringe, visited, city_map, source, destination, nodes, route, path)
+    
+
+def print_route(route):
+    if( not route): return
+    if( len(route) == 1): print(route[0])
+    else:
+        print(route[1])
+        route = route[0]
+        print_route(route)
+
+
 def uninformed_search(city_map, source, destination):
-    print('UNINFORMED')
+    fringe = {}
+    visited = {}
+    #route = []
+    fringe.update({source: [0,[source]] })
+    path = [source]
+    # return the shortest distance between source and destination if available
+    result = uniform_cost_search(fringe, visited, city_map, source, destination, [0, 0], [], [source])
+    
+ 
+    if(result[0][0]>-1):
+        print('nodes expanded: ' + str(result[1][0]) + '\nnodes generated: ' + str(result[1][1]) )
+        print('distance: ' + str(result[0][0]) + ' km')
+        print('route:')
+        route = result[0][1]
+        route = print_route(route)
+        print(route)
+    else:
+        print('nodes expanded: ' + str(result[1][0]) + '\nnodes generated: ' + str(result[1][1]) )
+        print('distance: infinity')
+        print('route:\nnone')
 
-    fringe = [source]
-    route = []
-    node = 0
-    path_found = False
+    print('')
+    # fringe = []
+
+    # fringe.append(source)
+    # new_map = {}
+    # for city in route:
+    #     new_map[city] = city_map[city]
 
     
+    #print(new_map)
 
-    
-
-    result = next_city(fringe, 0, city_map, destination, route, node, path_found)
-    
-    
-    #print_output(['City1', 'City2', 'City3', 'City4'], [0,0])
-    
-    if(result): # if found
-        print('path found')
-    else: # if not found
-        print('path not found')
-
-    
+    #route = []
+    #print(dfs(fringe, new_map, destination, [], 0, result[0], source))
+    #print(cost)
 
 
 
@@ -165,17 +124,15 @@ def read_file(input_file):
     cities2 = {}
     while(temp != "END OF INPUT"):
         temp = temp.split()       
-        cities.setdefault( temp[0], {})[temp[1]] = temp[2]
-        cities.setdefault( temp[1], {})[temp[0]] = temp[2]
+        cities.setdefault( temp[0], {})[temp[1]] = float(temp[2])
+        cities.setdefault( temp[1], {})[temp[0]] = float(temp[2])
         cities2.update({temp[0]:1})
         cities2.update({temp[1]:1})
         temp = f.readline()
-    return [cities, cities2]
-
-    
+    return cities
 
 def main():
-    print( sys.argv )
+    print( str(sys.argv) + '\n' )
     if( len(sys.argv) < 4):
         print('not enough arguments')
         return
@@ -185,29 +142,24 @@ def main():
     
     # list of all connected cities and its distance
     temp = read_file(input_file)
-    city_map = temp[0]
-    cities = temp[1]
+    city_map = temp
     
     # check to see whether city exists
     try:
-        cities[source]
+        city_map[source]
     except:
         print(source + ': does not exist')
         try:
-            cities[destination]
+            city_map[destination]
         except:
             print(destination + ': does not exist')
             return
     try:
-        cities[destination]
+        city_map[destination]
     except:
         print(destination + ': does not exist')
         return
     
-
-    print(city_map[source])
-    
-
     if( len(sys.argv) == 4): # no h_file -> uninformed search
         uninformed_search(city_map, source, destination)
         
