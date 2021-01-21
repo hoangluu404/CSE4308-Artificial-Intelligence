@@ -1,0 +1,21 @@
+(D1 Object)
+(D2 Object)
+(D3 Object)
+(A Object)
+(B Object)
+(C Object)
+
+(preconds
+ (on D1 D2) (on D2 A) (clear D1) (clear B) (clear C) (clear D1) 
+ (smaller D1 D2) (smaller D1 D3)
+ (smaller D2 D3)
+ (smaller D1 A) (smaller D1 B) (smaller D1 C)
+ (smaller D2 A) (smaller D2 B) (smaller D2 C)
+ (smaller D3 A) (smaller D3 B) (smaller D3 C)
+ 
+
+)
+(efects
+ (on D1 B) (on D2 C)
+
+)

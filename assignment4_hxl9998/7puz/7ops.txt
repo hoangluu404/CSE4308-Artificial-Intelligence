@@ -1,0 +1,104 @@
+(operator
+ moveC1C2
+ (params 
+  (<E> Object) (<R> Object) (<Row> Object)
+ )
+ (preconds
+  (empty <E>) (in C1 <E>) (in C2 <R>) (in <Row> <E>) (in <Row> <R>)
+ )
+ (effects
+  (in C2 <E>) (in C1 <R>) (del in C1 <E>) (del in C2 <R>)
+ )
+)
+
+(operator
+ moveC2C3
+ (params
+  (<E> Object) (<R> Object) (<Row> Object)
+ )
+ (preconds
+  (empty <E>) (in C2 <E>) (in C3 <R>) (in <Row> <E>) (in <Row> <R>)
+ )
+ (effects
+  (in C3 <E>) (in C2 <R>) (del in C2 <E>) (del in C3 <R>)
+ )
+)
+
+(operator
+ moveC3C2
+ (params
+  (<E> Object) (<L> Object) (<Row> Object)
+ )
+ (preconds
+  (empty <E>) (in C3 <E>) (in C2 <L>) (in <Row> <E>) (in <Row> <L>)
+ )
+ (effects
+  (in C2 <E>) (in C3 <L>) (del in C3 <E>) (del in C2 <L>)
+ )
+)
+
+(operator
+ moveC2C1
+ (params
+  (<E> Object) (<L> Object) (<Row> Object)
+ )
+ (preconds
+  (empty <E>) (in C2 <E>) (in C1 <L>) (in <Row> <E>) (in <Row> <L>) 
+ )
+ (effects
+  (in C1 <E>) (in C2 <L>) (del in C2 <E>) (del in C1 <L>)
+ )
+)
+
+(operator
+ moveR3R2
+ (params
+  (<E> Object) (<U> Object) (<Col> Object)
+ )
+ (preconds
+  (empty <E>) (in R3 <E>) (in R2 <U>) (in <Col> <E>) (in <Col> <U>)
+ )
+ (effects
+  (in R2 <E>) (in R3 <U>) (del in R3 <E>) (del in R2 <U>)
+ )
+)
+
+(operator
+ moveR2R1
+ (params
+  (<E> Object) (<U> Object) (<Col> Object)
+ )
+ (preconds
+  (empty <E>) (in R2 <E>) (in R1 <U>) (in <Col> <E>) (in <Col> <U>)
+ )
+ (effects
+  (in R1 <E>) (in R2 <U>) (del in R2 <E>) (del in R1 <U>)
+ )
+)
+
+(operator
+ moveR1R2
+ (params
+  (<E> Object) (<D> Object) (<Col> Object)
+ )
+ (preconds
+  (empty <E>) (in R1 <E>) (in R2 <D>) (in <Col> <E>) (in <Col> <D>)
+ )
+ (effects
+  (in R2 <E>) (in R1 <D>) (del in R1 <E>) (del in R2 <D>)
+ )
+)
+
+(operator
+ moveR2R3
+ (params
+  (<E> Object) (<D> Object) (<Col> Object)
+ )
+ (preconds
+  (empty <E>) (in R2 <E>) (in R3 <D>) (in <Col> <E>) (in <Col> <D>)
+ )
+ (effects
+  (in R3 <E>) (in R2 <D>) (del in R2 <E>) (del in R3 <D>)
+ )
+)
+

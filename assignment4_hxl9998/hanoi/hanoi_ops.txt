@@ -1,0 +1,4 @@
+(operator moveDiskfromOb1toOb2
+ (params (<d> Object) (<o1> Object) (<o2> Object))
+ (preconds (clear <d>) (on <d> <o1>) (clear <o2>) (smaller <d> <o2>))
+ (effects (clear <o1>) (del clear <o2>) (on <d> <o2>) (del on <d> <o1>)))
